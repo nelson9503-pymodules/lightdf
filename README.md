@@ -2,6 +2,10 @@
 
 lightdf is a dataframe for controlling 2D-table-structure data. It acts like pandas but only includes the methods that users will use them in 80% times. Only providing essencial methods keeps lightdf in light weight so that it is a good data intermediary on simple tasks.
 
+## Test Repository
+
+[test_lightdf](https://github.com/nelson9503/test_lightdf)
+
 ## Methods Discovery
 
 **func |** new ( datalist: `list`, indexlist: `list`, headerlist: `list` )  -> lightdf: `lightdf Class`

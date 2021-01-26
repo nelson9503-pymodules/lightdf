@@ -46,10 +46,10 @@ class Dataframe:
         """
         Write Data.
         """
-        if not key in self.__data:
-            self.__data[key] = {}
         if self.__cols[self.keyName] == datetime and type(key) == str:
             key = datetime.strptime(key, "%Y-%m-%d")
+        if not key in self.__data:
+            self.__data[key] = {}
         if not column in self.__cols:
             raise AttributeError("Column not exists.")
         if self.__cols[column] == datetime and type(value) == str:
@@ -158,7 +158,24 @@ class Dataframe:
         """
         Export to dict.
         """
-        return self.__data
+        data = {}
+        for key in self.__data:
+            if self.__cols[self.keyName] == datetime:
+                key2 = key.strftime("%Y-%m-%d")
+            else:
+                key2 = key
+            data[key2] = {}
+            for col in self.__cols:
+                if col == self.keyName:
+                    continue
+                if not col in self.__data[key]:
+                    continue
+                if self.__cols[col] == datetime:
+                    data[key2][col] = self.__data[key][col].strftime(
+                        "%Y-%m-%d")
+                else:
+                    data[key2][col] = self.__data[key][col]
+        return data
 
     def to_csv(self, path: str):
         """

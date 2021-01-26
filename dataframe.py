@@ -94,7 +94,7 @@ class Dataframe:
         """
         if not column in self.__cols:
             raise AttributeError("Column not exists.")
-        self.__cols[column] = newType()
+        self.__cols[column] = newType
         for key in self.__data:
             if column in self.__data[key] and not self.__data[key][column] == None:
                 try:

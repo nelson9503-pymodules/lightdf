@@ -51,7 +51,7 @@ class Column:
     def to_unique_column(self):
         data = []
         for d in self.data:
-            if d in data:
+            if not d in data:
                 data.append(d)
             else:
                 raise ValueError(

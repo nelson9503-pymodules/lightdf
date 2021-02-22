@@ -72,3 +72,15 @@ class Column:
         if self.unique == True and data in self.data:
             raise ValueError("Duplicated in unique column.")
         return data
+
+    def get_initialize_value(self) -> any:
+        if self.none == True:
+            return None
+        elif self.data_type == int:
+            return 0
+        elif self.data_type == float:
+            return 0.0
+        elif self.data_type == bool:
+            return False
+        elif self.data_type == str:
+            return ""

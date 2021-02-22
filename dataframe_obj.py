@@ -15,7 +15,8 @@ class Dataframe:
             raise KeyError("Column name duplicated to key column name.")
         self.__columns[col_name] = Column(col_name, col_type, unique, none)
         for _ in range(len(self.__keys.data)):
-            self.__columns[col_name].append(None)
+            data = self.__columns[col_name].get_initialize_value()
+            self.__columns[col_name].append(data)
 
     def drop_col(self, col_name: str):
         if not col_name in self.__columns.keys():
@@ -58,7 +59,8 @@ class Dataframe:
             for col_name in self.list_col():
                 if col_name == col_key:
                     continue
-                self.__columns[col_name].append(None)
+                data = self.__columns[col_name].get_initialize_value()
+                self.__columns[col_name].append(data)
 
     def read(self, row_key: any, col_key: any) -> any:
         row = self.__check_row_num(row_key)

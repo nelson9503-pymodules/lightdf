@@ -22,12 +22,12 @@ class Dataframe:
             raise KeyError("column not exists.")
         del self.__columns[col_name]
 
-    def type_col(self, col_name: str, data_type: type):
+    def set_col_type(self, col_name: str, data_type: type):
         self.__columns[col_name].convert_data_type(data_type)
 
     def list_col(self) -> list:
         return list(self.__columns.keys())
-    
+
     def list_col_type(self) -> list:
         li = []
         for column in self.__columns:
@@ -37,7 +37,10 @@ class Dataframe:
     def list_keys(self) -> list:
         return self.__keys.data
 
-    def change_keys(self, col_name: str, keep: bool = True):
+    def get_keys_type(self) -> type:
+        return self.__keys.data_type
+
+    def set_keys_column(self, col_name: str, keep: bool = True):
         if keep == True:
             self.__columns[self.__keys.name] = self.__keys
         self.__columns[col_name].to_unique_column()
@@ -115,19 +118,21 @@ class Dataframe:
         with open(path, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerows(li)
-    
+
     def from_dict(self, d: dict):
         for key in d:
             for col in d[key]:
                 self.write(key, col, d[key][col])
-    
+
     def from_list(self, li: list):
         cols = self.list_col()
+        cols_type = self.list_col_type()
+        key_type = self.get_keys_type()
         for row in li:
-            key = row[0]
+            key = key_type(row[0])
             for i in range(1, len(row)):
-                self.write(key, cols[i-1], row[i])
-    
+                self.write(key, cols[i-1], cols_type[i-1](row[i]))
+
     def from_csv(self, path: str, header: bool = True):
         with open(path, newline='') as csvfile:
             rows = csv.reader(csvfile)
@@ -137,7 +142,7 @@ class Dataframe:
         if header == True:
             li = li[1:]
         self.from_list(li)
-    
+
     def join_dataframe(self, df: object):
         col_names = df.list_col()
         col_types = df.list_col_type()
@@ -152,5 +157,3 @@ class Dataframe:
     def __check_row_num(self, row_key: any) -> int:
         num = self.__keys.data.index(row_key)
         return num
-
-

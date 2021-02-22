@@ -34,6 +34,9 @@ class Dataframe:
         for column in self.__columns:
             li.append(self.__columns[column].data_type)
         return li
+    
+    def list_col_data(self, col_name: str) -> list:
+        return self.__columns[col_name].data
 
     def list_keys(self) -> list:
         return self.__keys.data

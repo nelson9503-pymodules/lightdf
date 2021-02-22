@@ -40,7 +40,8 @@ class Dataframe:
     def change_keys(self, col_name: str, keep: bool = True):
         if keep == True:
             self.__columns[self.__keys.name] = self.__keys
-        self.__keys = self.__columns[col_name].to_unique_column()
+        self.__columns[col_name].to_unique_column()
+        self.__keys = self.__columns[col_name]
         del self.__columns[col_name]
 
     def write(self, row_key: any, col_key: any, value: any):

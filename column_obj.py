@@ -1,7 +1,7 @@
 
 class Column:
 
-    def __init__(self, name: str, data_type: type, unique_values: bool = False):
+    def __init__(self, name: str, data_type: type, unique_values: bool = False, none_values: bool = True):
         if not type(name) == str:
             raise TypeError("Column name must be string.")
         self.name = name
@@ -10,6 +10,9 @@ class Column:
                 "data_type must be python type classes. (int, str, float, bool...)")
         self.data_type = data_type
         self.unique = unique_values
+        self.none = none_values
+        if self.unique == True: # unique values column never contains none value
+            self.none = False
         self.data = []
 
     def append(self, data: any):
@@ -57,10 +60,12 @@ class Column:
     def check_data_type(self, data: any) -> any:
         if data == None:
             # None is ok for non-unique column
-            if self.unique == False:
+            if self.unique == False and self.none == True:
                 return data
-            else:
+            elif self.unique == True:
                 raise ValueError("Unique-values column cannot input None.")
+            else:
+                raise ValueError("Non-none column cannot input None.")
         elif not type(data) == self.data_type:
             # try convert it
             data = self.data_type(data)

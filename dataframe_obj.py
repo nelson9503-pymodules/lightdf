@@ -8,12 +8,12 @@ class Dataframe:
         self.__keys = Column(key_name, key_type, True)
         self.__columns = {}
 
-    def add_col(self, col_name: str, col_type: type, unique: bool = False):
+    def add_col(self, col_name: str, col_type: type, unique: bool = False, none: bool = True):
         if col_name in self.__columns:
             raise KeyError("Duplicated column name.")
         if col_name == self.__keys.name:
             raise KeyError("Column name duplicated to key column name.")
-        self.__columns[col_name] = Column(col_name, col_type)
+        self.__columns[col_name] = Column(col_name, col_type, unique, none)
         for _ in range(len(self.__keys.data)):
             self.__columns[col_name].append(None)
 

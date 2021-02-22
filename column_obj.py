@@ -16,17 +16,13 @@ class Column:
         data = self.check_data_type(data)
         self.data.append(data)
 
-    def insert(self, position: int, data: any):
+    def update(self, position: int, data: any):
         if position >= len(self.data):
             raise IndexError("Column position out of range.")
         elif position < 0:
             raise IndexError("Negative column position.")
         data = self.check_data_type(data)
-        a = self.data[:position]
-        b = self.data[position:]
-        a.append(data)
-        a.extend(b)
-        self.data = a
+        self.data[position] = data
 
     def convert_data_type(self, data_type: type):
         if data_type == self.data_type:

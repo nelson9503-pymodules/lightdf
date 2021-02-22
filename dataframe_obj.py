@@ -50,7 +50,7 @@ class Dataframe:
     def write(self, row_key: any, col_key: any, value: any):
         if row_key in self.__keys.data:
             row = self.__check_row_num(row_key)
-            self.__columns[col_key].insert(row, value)
+            self.__columns[col_key].update(row, value)
         else:
             row = len(self.__keys.data)
             self.__keys.append(row_key)

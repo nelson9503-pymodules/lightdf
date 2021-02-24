@@ -279,21 +279,34 @@ class Dataframe:
         if not col_name in self.__columns and not col_name == self.key_column_name:
             raise KeyError("Column not exists.")
         self.set_col_type(col_name, str)
-        for key_value in self.get_key_list():
-            value = self.read(key_value, col_name)
-            if value == None:
-                continue
-            d = datetime.fromtimestamp(int(value))
-            self.write(key_value, col_name, d.strftime("%Y-%m-%d"))
+        if col_name == self.key_column_name:
+            for id in self.__key_column.data_dict:
+                value = self.__key_column.get_value(id)
+                d = datetime.fromtimestamp(int(value))
+                self.__key_column.update_value(id, d.strftime("%Y-%m-%d"))
+        else:
+            for key_value in self.get_key_list():
+                value = self.read(key_value, col_name)
+                if value == None:
+                    continue
+                d = datetime.fromtimestamp(int(value))
+                self.write(key_value, col_name, d.strftime("%Y-%m-%d"))
 
     def col_datestring_to_timestamp(self, col_name: any):
         if not col_name in self.__columns and not col_name == self.key_column_name:
             raise KeyError("Column not exists.")
-        for key_value in self.get_key_list():
-            value = self.read(key_value, col_name)
-            if value == None:
-                continue
-            d = datetime.strptime(value, "%Y-%m-%d")
-            timestamp = int(d.timestamp())
-            self.write(key_value, col_name, timestamp)
+        if col_name == self.key_column_name:
+            for id in self.__key_column.data_dict:
+                value = self.__key_column.get_value(id)
+                d = datetime.strptime(value, "%Y-%m-%d")
+                timestamp = int(d.timestamp())
+                self.__key_column.update_value(id, timestamp)
+        else:
+            for key_value in self.get_key_list():
+                value = self.read(key_value, col_name)
+                if value == None:
+                    continue
+                d = datetime.strptime(value, "%Y-%m-%d")
+                timestamp = int(d.timestamp())
+                self.write(key_value, col_name, timestamp)
         self.set_col_type(col_name, int)

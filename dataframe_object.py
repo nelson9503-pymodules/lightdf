@@ -1,4 +1,5 @@
 from .column_object import Column
+from datetime import datetime
 import csv
 
 
@@ -264,3 +265,35 @@ class Dataframe:
                 if col == col_name:
                     continue
                 self.__columns[col].reset_id(id_map)
+
+    def round_col(self, col_name: any, decimal: int):
+        if not col_name in self.__columns and not col_name == self.key_column_name:
+            raise KeyError("Column not exists.")
+        for key_value in self.get_key_list():
+            value = self.read(key_value, col_name)
+            if value == None:
+                continue
+            self.write(key_value, col_name, round(value, decimal))
+
+    def col_timestamp_to_datestring(self, col_name: any):
+        if not col_name in self.__columns and not col_name == self.key_column_name:
+            raise KeyError("Column not exists.")
+        self.set_col_type(col_name, str)
+        for key_value in self.get_key_list():
+            value = self.read(key_value, col_name)
+            if value == None:
+                continue
+            d = datetime.fromtimestamp(int(value))
+            self.write(key_value, col_name, d.strftime("%Y-%m-%d"))
+
+    def col_datestring_to_timestamp(self, col_name: any):
+        if not col_name in self.__columns and not col_name == self.key_column_name:
+            raise KeyError("Column not exists.")
+        for key_value in self.get_key_list():
+            value = self.read(key_value, col_name)
+            if value == None:
+                continue
+            d = datetime.strptime(value, "%Y-%m-%d")
+            timestamp = int(d.timestamp())
+            self.write(key_value, col_name, timestamp)
+        self.set_col_type(col_name, int)

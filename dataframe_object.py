@@ -1,5 +1,5 @@
 from .column_object import Column
-from datetime import datetime
+from datetime import datetime, timedelta
 import csv
 
 
@@ -282,14 +282,14 @@ class Dataframe:
         if col_name == self.key_column_name:
             for id in self.__key_column.data_dict:
                 value = self.__key_column.get_value(id)
-                d = datetime.fromtimestamp(int(value))
+                d = self.__from_timestamp(value)
                 self.__key_column.update_value(id, d.strftime("%Y-%m-%d"))
         else:
             for key_value in self.get_key_list():
                 value = self.read(key_value, col_name)
                 if value == None:
                     continue
-                d = datetime.fromtimestamp(int(value))
+                d = self.__from_timestamp(value)
                 self.write(key_value, col_name, d.strftime("%Y-%m-%d"))
 
     def col_datestring_to_timestamp(self, col_name: any):
@@ -299,7 +299,7 @@ class Dataframe:
             for id in self.__key_column.data_dict:
                 value = self.__key_column.get_value(id)
                 d = datetime.strptime(value, "%Y-%m-%d")
-                timestamp = int(d.timestamp())
+                timestamp = self.__to_timestamp(d)
                 self.__key_column.update_value(id, timestamp)
         else:
             for key_value in self.get_key_list():
@@ -307,6 +307,16 @@ class Dataframe:
                 if value == None:
                     continue
                 d = datetime.strptime(value, "%Y-%m-%d")
-                timestamp = int(d.timestamp())
+                timestamp = self.__to_timestamp(d)
                 self.write(key_value, col_name, timestamp)
         self.set_col_type(col_name, int)
+    
+    def __from_timestamp(self, timestamp: int) -> datetime:
+        d0 = datetime.fromtimestamp(0)
+        delta = timedelta(seconds=int(timestamp))
+        return d0 + delta
+    
+    def __to_timestamp(self, date: datetime) -> int:
+        d0 = datetime.fromtimestamp(0)
+        delta = d0 - date
+        return delta.days * 86400 + delta.seconds

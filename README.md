@@ -51,13 +51,13 @@ key_values = df.get_key_list()
 Get column names list:
 
 ```python
-key_values = df.get_col_list(
+key_values = df.get_col_list()
 ```
 
 Get the data type of a column:
 
 ```python
-data_type = df.get_col_type("col_name")
+data_type = df.get_data_type("col_name")
 ```
 
 Get a row of data as list:
@@ -87,14 +87,14 @@ df.drop_col("col_name")
 Set data type of object:
 
 ```python
-df.set_col_type("col_name", int)
+df.set_data_type("col_name", int)
 ```
 
 Set column unique or not none:
 
 ```python
 df.set_unique("col_name", True)
-df.set_none("col_name", False)
+df.set_not_none("col_name", False)
 ```
 
 ## Control Keys
@@ -102,7 +102,7 @@ df.set_none("col_name", False)
 Users can select a column to replace the key column, the selected column must contains no duplicated values. If `keep` set True, the original key column will be append to the dataframe as value column.
 
 ```python
-df.set_keys_column("col_name", True)
+df.set_column_to_key("col_name", True)
 ```
 
 ## Export Dataframe
@@ -140,25 +140,13 @@ df.from_dict(d)
 
 # update dataframe form csv
 # if header is Ture, the dataframe will skip reading first row
-df.from_csv("path_of_csv", header=True)
+df.from_csv("path_of_csv", ignore_header_row=True)
 
 # you can use join function to update dataframe from another dataframe
-df.join_dataframe(self, other_df)
+df.from_df(self, other_df)
 ```
 
 ## Data Process Methods
-
-`filter_contains()` filter the dataframe basing on the value containes key words.
-
-```python
-df2 = df.filter_contains("col_name", "contains_key_words")
-```
-
-`filter_range()` filter the dataframe basing on the value in a range of values.
-
-```python
-df2 = df.filter_range("col_name", 2, 5) # 2 < value < 5
-```
 
 `drop_duplicated()` drop the row with duplicated value, which will keep the first found value.
 
@@ -166,26 +154,8 @@ df2 = df.filter_range("col_name", 2, 5) # 2 < value < 5
 df2 = df.drop_duplicated("col_name")
 ```
 
-`sort_col()` sort the column values using python list sorting function.
+`sort()` sort the column values using python list sorting function.
 
 ```python
-df.sort_col("col_name", ascending=True)
-```
-
-`round_col()` round the column values using python round function.
-
-```python
-df.round("col_name", 4) # to 4 decimal
-```
-
-`col_timestamp_to_datestring()` convert the timestamp in column to the date string (YYYY-MM-DD).
-
-```python
-df.col_timestamp_to_datestring("col_name")
-```
-
-`col_datestring_to_timestamp()` convert the date string (YYYY-MM-DD) in column to the timestamp.
-
-```python
-df.col_datestring_to_timestamp("col_name")
+df.sort("col_name", ascending=True)
 ```
